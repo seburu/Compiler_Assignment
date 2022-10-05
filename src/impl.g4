@@ -5,12 +5,12 @@ start: c=sequence EOF;
 
 sequence: c=command cs=sequence*;
 
-command: '.hardware' id=IDENTIFIER
-       | '.inputs' ids=IDENTIFIER
-       | '.outputs' ids=IDENTIFIER+
-       | '.latch' id1=IDENTIFIER '->' id2=IDENTIFIER
-       | '.update' e=expr*
-       | '.simulate' id=IDENTIFIER '=' b=BINARY
+command: '.hardware' id=IDENTIFIER                    #Hardware
+       | '.inputs' ids=IDENTIFIER+                    #Inputs
+       | '.outputs' ids=IDENTIFIER+                   #Outputs
+       | '.latch' id1=IDENTIFIER '->' id2=IDENTIFIER  #Latch
+       | '.update' e=expr*                            #Update
+       | '.simulate' id=IDENTIFIER '=' b=BINARY       #Simulate
        ;
 
 expr: '(' e=expr ')'  # Parenthesis
@@ -23,7 +23,7 @@ expr: '(' e=expr ')'  # Parenthesis
     ;
 
 BINARY: ('0'|'1')+;
-HVIDRUM : [ \t\n]+ -> skip ;
+HVIDRUM : [ \t\r\n]+ -> skip ;
 IDENTIFIER: [a-zA-Z][a-zA-Z0-9]*;
 COMMENT : '//' ~[\n]* -> skip ;
 MULTILINECOMMENTS :  '/*'  ( '*'~[/] | ~[*]  )* '*/' -> skip;

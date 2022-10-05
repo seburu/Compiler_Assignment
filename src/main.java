@@ -35,9 +35,9 @@ public class main {
 
         // Construct an interpreter and run it on the parse tree
         Interpreter interpreter = new Interpreter();
-        Expr result=interpreter.visit(parseTree);
-        System.out.println("The result is: "+result.eval());
-    }
+        Sequence result=interpreter.visit(parseTree);
+        System.out.println(result);
+   }
 }
 
 // We write an interpreter that implements interface
@@ -45,76 +45,76 @@ public class main {
 // This is parameterized over a return type "<T>" which is in our case
 // simply a Integer.
 
-class Interpreter extends AbstractParseTreeVisitor<Expr> implements implVisitor<Expr> {
+class Interpreter extends AbstractParseTreeVisitor<Sequence> implements implVisitor<Sequence> {
 
-    public Expr visitStart(implParser.StartContext ctx){
-        return visit(ctx.e1);
-    };
-    public Expr visitMultiplication(implParser.MultiplicationContext ctx){
-        if (ctx.op.getText().equals("*"))
-            return new Multiplication(visit(ctx.e1),visit(ctx.e2));
-        else
-            return new Division(visit(ctx.e1),visit(ctx.e2));
-    };
-    public Expr visitAddition(implParser.AdditionContext ctx){
-        if (ctx.op.getText().equals("+"))
-            return new Addition(visit(ctx.e1),visit(ctx.e2));
-        else
-            return new Subtraction(visit(ctx.e1),visit(ctx.e2));
-    };
-    public And visitAnd(implParser.AndContext ctx){
-
-        return null;
-    }
-
-    public Var visitVar(implParser.VarContext ctx){
-
-        return null;
-    }
-
-    public Equal visitEqual(implParser.EqualContext ctx){
-
-        return null;
-    }
-
-    public Or visitOr(implParser.OrContext ctx){
-
-        return null;
-    }
-
-    public Not visitNot(implParser.NotContext ctx){
-
-        return null;
-    }
-
-    public Parenthesis visitParenthesis(implParser.ParenthesisContext ctx){
-
-        return null;
-    }
-
-    public Assignment visitAssignment(implParser.AssignmentContext ctx){
-
-        return null;
-    }
-
-    public Command visitCommand(implParser.CommandContext ctx) {
-
-        return null;
+    public Sequence visitStart(implParser.StartContext ctx){
+        return visit(ctx.c);
     }
 
     public Sequence visitSequence(implParser.SequenceContext ctx) {
+        return visit(ctx);
+    }
 
+    public Sequence visitHardware(implParser.HardwareContext ctx) {
         return null;
     }
 
-    public Expr visitVariable(implParser.VariableContext ctx){
-        return new Variable(ctx.x.getText());
-    };
-    public Expr visitConstant(implParser.ConstantContext ctx){
-        return new Constant(Integer.parseInt(ctx.c.getText()));
-    };
-    public Expr visitParentheses(implParser.ParenthesesContext ctx){
-        return visit(ctx.e1);
-    };
+    public Sequence visitInputs(implParser.InputsContext ctx) {
+        return null;
+    }
+
+    public Sequence visitOutputs(implParser.OutputsContext ctx) {
+        return null;
+    }
+
+    public Sequence visitLatch(implParser.LatchContext ctx) {
+        return null;
+    }
+
+    public Sequence visitUpdate(implParser.UpdateContext ctx) {
+        return null;
+    }
+
+    public Sequence visitSimulate(implParser.SimulateContext ctx) {
+        return null;
+    }
+
+
+    public Sequence visitCommand(implParser.CommandContext ctx) {
+        return null;
+    }
+
+    public Sequence visitAssignment(implParser.AssignmentContext ctx) {
+        return null;
+    }
+
+    public Sequence visitParenthesis(implParser.ParenthesisContext ctx) {
+        return null;
+    }
+
+    public Sequence visitNot(implParser.NotContext ctx) {
+        return null;
+    }
+
+    public Sequence visitOr(implParser.OrContext ctx) {
+        return null;
+    }
+
+    public Sequence visitEqual(implParser.EqualContext ctx) {
+        return null;
+    }
+
+    public Sequence visitVar(implParser.VarContext ctx) {
+        return null;
+    }
+
+    public Sequence visitAnd(implParser.AndContext ctx) {
+        return null;
+    }
+
+    ;
+
+
+
 }
 
