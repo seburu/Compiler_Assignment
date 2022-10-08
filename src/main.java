@@ -1,8 +1,8 @@
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.tree.*;
-
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class main {
     public static void main(String[] args) throws IOException{
@@ -35,7 +35,7 @@ public class main {
 
         // Construct an interpreter and run it on the parse tree
         Interpreter interpreter = new Interpreter();
-        Sequence result=interpreter.visit(parseTree);
+        Command result = (Command) interpreter.visit(parseTree);
         System.out.println(result);
    }
 }
@@ -45,74 +45,87 @@ public class main {
 // This is parameterized over a return type "<T>" which is in our case
 // simply a Integer.
 
-class Interpreter extends AbstractParseTreeVisitor<Sequence> implements implVisitor<Sequence> {
+class Interpreter extends AbstractParseTreeVisitor<AST> implements implVisitor<AST> {
 
-    public Sequence visitStart(implParser.StartContext ctx){
-        return visit(ctx.c);
+    public AST visitStart(implParser.StartContext ctx){
+
+        return visit(ctx.cs);
     }
 
-    public Sequence visitSequence(implParser.SequenceContext ctx) {
-        return visit(ctx);
+    public AST visitSequence(implParser.SequenceContext ctx) {
+        return new Sequence((Command)visit(ctx.c),(Command)visit(ctx.cs));
     }
 
-    public Sequence visitHardware(implParser.HardwareContext ctx) {
+    public AST visitNOP(implParser.NOPContext ctx) {
+
+        return new NOP();
+    }
+
+    public AST visitHardware(implParser.HardwareContext ctx) {
+        return new Hardware(ctx.id.getText());
+    }
+
+    public AST visitInputs(implParser.InputsContext ctx) {
+        return new Inputs(ctx.children);
+    }
+
+    public AST visitOutputs(implParser.OutputsContext ctx) {
+
+        return new Outputs(ctx.children);
+    }
+
+    public AST visitLatch(implParser.LatchContext ctx) {
+
+        return new Latch(ctx.id1.getText(),ctx.id2.getText());
+    }
+
+    public AST visitUpdate(implParser.UpdateContext ctx) {
+
+        return new Update(ctx.e.children);
+    }
+
+    public AST visitSimulate(implParser.SimulateContext ctx) {
+
+        return new Simulate(ctx.id.getText(),Integer.parseInt(ctx.b.getText()));
+    }
+
+    //TODO Spørg TA om hvorfor vi aldrig kommer ned til denne metode
+    public AST visitAssignment(implParser.AssignmentContext ctx){
+        return new Assignment(ctx.id.getText(),(Expr) visit(ctx.e));
+    }
+
+    public AST visitParenthesis(implParser.ParenthesisContext ctx) {
+        return visit(ctx.e);
+    }
+
+    //TODO Spørg TA om hvordan denne metode skal laves
+    public AST visitNot(implParser.NotContext ctx) {
+
         return null;
     }
 
-    public Sequence visitInputs(implParser.InputsContext ctx) {
+    //TODO Spørg TA om hvordan denne metode skal laves
+    public AST visitOr(implParser.OrContext ctx) {
+
         return null;
     }
 
-    public Sequence visitOutputs(implParser.OutputsContext ctx) {
+    //TODO Spørg TA om hvordan denne metode skal laves
+    public AST visitEqual(implParser.EqualContext ctx) {
+
         return null;
     }
 
-    public Sequence visitLatch(implParser.LatchContext ctx) {
-        return null;
+    public AST visitVar(implParser.VarContext ctx) {
+
+        return new Var(ctx.x.getText());
     }
 
-    public Sequence visitUpdate(implParser.UpdateContext ctx) {
+    //TODO Spørg TA om hvordan denne metode skal laves
+    public AST visitAnd(implParser.AndContext ctx) {
+
         return null;
     }
-
-    public Sequence visitSimulate(implParser.SimulateContext ctx) {
-        return null;
-    }
-
-
-    public Sequence visitCommand(implParser.CommandContext ctx) {
-        return null;
-    }
-
-    public Sequence visitAssignment(implParser.AssignmentContext ctx) {
-        return null;
-    }
-
-    public Sequence visitParenthesis(implParser.ParenthesisContext ctx) {
-        return null;
-    }
-
-    public Sequence visitNot(implParser.NotContext ctx) {
-        return null;
-    }
-
-    public Sequence visitOr(implParser.OrContext ctx) {
-        return null;
-    }
-
-    public Sequence visitEqual(implParser.EqualContext ctx) {
-        return null;
-    }
-
-    public Sequence visitVar(implParser.VarContext ctx) {
-        return null;
-    }
-
-    public Sequence visitAnd(implParser.AndContext ctx) {
-        return null;
-    }
-
-    ;
 
 
 

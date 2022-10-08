@@ -1,8 +1,7 @@
 .hardware trafiklys
 
-// Trafiklys eksempel.
+.inputs Button Yourmom Is Gay
 
-.inputs Button
 .outputs Red Yel Green PRed PGreen
 
 .latch Red -> RedM
@@ -10,7 +9,6 @@
 .latch Req -> ReqM
 
 .update
-
 Clr = RedM && !YelM
 Req = (ReqM || Button) && !Clr
 Red = !RedM && YelM || RedM && !YelM
@@ -21,8 +19,8 @@ PRed   = !PGreen
 
 .simulate Button=001001111001
 
-/*
 
+/*
 Expected output of the simulator:
 
 001001111001 Button
@@ -31,5 +29,4 @@ Expected output of the simulator:
 110001000110 Green
 111011101111 PRed
 000100010000 PGreen
-
 */
