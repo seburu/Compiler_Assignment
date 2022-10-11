@@ -3,6 +3,7 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.tree.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class main {
     public static void main(String[] args) throws IOException{
@@ -80,8 +81,11 @@ class Interpreter extends AbstractParseTreeVisitor<AST> implements implVisitor<A
     }
 
     public AST visitUpdate(implParser.UpdateContext ctx) {
-
-        return new Update(ctx.e.children);
+        ArrayList<Assignment> updates = new ArrayList<Assignment>();
+        for (implParser.AssignmentContext a : ctx) {
+            updates.add((Assignment) visit(a));
+        }
+        return new Update(updates);
     }
 
     public AST visitSimulate(implParser.SimulateContext ctx) {

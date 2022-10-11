@@ -10,18 +10,17 @@ command: '.hardware' id=IDENTIFIER                      #Hardware
        | '.inputs' (ids=IDENTIFIER)+                    #Inputs
        | '.outputs' (ids=IDENTIFIER)+                   #Outputs
        | '.latch' id1=IDENTIFIER '->' id2=IDENTIFIER    #Latch
-       | '.update' (e=expr)+                               #Update
+       | '.update' as=assignment+                       #Update
        | '.simulate' id=IDENTIFIER '=' b=BINARY         #Simulate
        ;
 
-
+assignment : id=IDENTIFIER '=' e=expr ;
 
 expr: '(' e=expr ')'                                    #Parenthesis
     | '!' e=expr                                        #Not
     | e1=expr '&&' e2=expr                              #And
     | e1=expr '||' e2=expr                              #Or
     | e1=expr '==' e2=expr                              #Equal
-    | id=IDENTIFIER '=' e=expr                          #Assignment
     | x=IDENTIFIER                                      #Var
     ;
 
