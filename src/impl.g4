@@ -2,6 +2,7 @@ grammar impl;
 
 start   : ha=hardware in=inputs ou=outputs la+=latch+ up=update si=simulate EOF;
 
+
 hardware: '.hardware' id=IDENTIFIER;
 inputs  : '.inputs' ids+=IDENTIFIER+;
 outputs : '.outputs' ids+=IDENTIFIER+;

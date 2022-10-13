@@ -36,7 +36,7 @@ public class main {
 
         // Construct an interpreter and run it on the parse tree
         Interpreter interpreter = new Interpreter();
-        Program result = (Program) interpreter.visit(parseTree);
+        Something result = (Something) interpreter.visit(parseTree);
         System.out.println(result);
    }
 }
@@ -62,16 +62,13 @@ class Interpreter extends AbstractParseTreeVisitor<AST> implements implVisitor<A
             latches.add(visitLatch(i));
         }
 
-        List<Update> updates = new ArrayList<>();
-        for (var i: ctx.up.as){
-            updates.add(new Update(i.id.getText(), (Expr) visit(i.e)));
-        }
+        Update updates = visitUpdate(ctx.up);
 
 
-        Simulate simulate = new Simulate(ctx.si.id.getText(),ctx.si.b.getText());
+        Simulate simulate = visitSimulate(ctx.si);
 
 
-        Program p = new Program(hardware, inputs, outputs, latches, updates, simulate);
+        Something p = new Program(hardware, inputs, outputs, latches, updates, simulate);
 
         return p;
 
@@ -94,15 +91,24 @@ class Interpreter extends AbstractParseTreeVisitor<AST> implements implVisitor<A
         return new Latch(ctx.id1,ctx.id2);
     }
 
-    public AST visitUpdate(implParser.UpdateContext ctx) {
+    public Update visitUpdate(implParser.UpdateContext ctx) {
+        List<Assignment> assignments = new ArrayList<>();
+        visit(ctx.as.get(0));
+
+
+
+
         return null;
     }
 
-    public AST visitSimulate(implParser.SimulateContext ctx) {
-        return null;
+    public Simulate visitSimulate(implParser.SimulateContext ctx) {
+        return new Simulate(ctx.id.getText(),ctx.b.getText());
     }
 
     public AST visitAssignment(implParser.AssignmentContext ctx) {
+
+
+        visit(ctx.e);
         return null;
     }
 

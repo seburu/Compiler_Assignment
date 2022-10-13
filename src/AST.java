@@ -8,16 +8,16 @@ import java.util.List;
 
 public abstract class AST{};
 
-abstract class Expr extends AST{
-    abstract public boolean eval(Environment env);
+abstract class Something extends AST{
+
 }
 
-class Program extends AST{
+class Program extends Something{
     Hardware hardware;
     Inputs inputs;
     Outputs outputs;
     List<Latch> latches;
-    List<Update> updates;
+    Update updates;
     Simulate simulate;
 
 
@@ -26,7 +26,7 @@ class Program extends AST{
             Inputs inputs,
             Outputs outputs,
             List<Latch> latches,
-            List<Update> updates,
+            Update updates,
             Simulate simulate) {
         this.hardware = hardware;
         this.inputs = inputs;
@@ -37,7 +37,7 @@ class Program extends AST{
     }
 }
 
-class Hardware extends AST{
+class Hardware extends Something{
     String id;
 
     public Hardware(String id){
@@ -45,7 +45,7 @@ class Hardware extends AST{
     }
 }
 
-class Inputs extends AST{
+class Inputs extends Something{
     List<String> ids = new ArrayList<>();
 
     public Inputs(List<Token> ids){
@@ -56,7 +56,7 @@ class Inputs extends AST{
 
 }
 
-class Outputs extends AST{
+class Outputs extends Something{
     List<String> ids = new ArrayList<>();
 
     public Outputs(List<Token> ids){
@@ -67,7 +67,7 @@ class Outputs extends AST{
 }
 
 
-class Latch extends AST{
+class Latch extends Something{
     String id1,id2;
 
     public Latch(Token id1, Token id2) {
@@ -76,19 +76,33 @@ class Latch extends AST{
 
     }
 }
-
-class Update extends AST{
+/*
+class Assignment extends AST{
     String id;
     Expr e;
 
-    public Update(String id, Expr e){
+    public Assignment(String id, Expr e){
         this.id = id;
         this.e = e;
     }
 
+
+}
+*/
+
+class Update extends Something{
+    List<Assignment> assignments = new ArrayList<>();
+
+    public Update(List<Token> assignments){
+        for (Token i : assignments){
+
+        }
+
+    }
+
 }
 
-class Simulate extends AST{
+class Simulate extends Something{
     String id;
     String b;
 
@@ -96,73 +110,35 @@ class Simulate extends AST{
         this.id = id;
         this.b = b;
     }
-
 }
 
-/*
-
-
-class Hardware extends AST{
-    String var;
-    Hardware(String var){this.var = var;}
+abstract class Expr extends AST{
+    //abstract public boolean eval(Environment env);
 }
 
-
-
-class Outputs extends AST{
-    List<ParseTree> children = new ArrayList<>();
-    public Outputs(List<ParseTree> children){
-
-    }
-}
-
-
-class Update extends AST{
-    List<ParseTree> children = new ArrayList<>();
-    public Update(List<ParseTree> children){
-
-    }
-}
-
-class Simulate extends AST{
-    String var;
-    int value;
-
-    public Simulate(String var, int value) {
-        this.var = var;
-        this.value = value;
-    }
-}
-
-class Assignment extends AST{
-    String varname;
+class Assignment extends Something{
+    String id;
     Expr e;
-    Assignment(String varname, Expr e){ this.varname=varname; this.e=e;}
-    public void eval(Environment env){
-        env.setVariable(varname,e.eval(env));
+
+    public Assignment(String id, Expr e){
+        this.id = id;
+        this.e = e;
     }
 }
 
-//TODO Placeholder metode
-class Not extends AST{
+class And extends Expr{
+    Expr e1;
+    Expr e2;
 
-}
-
-class Var extends AST{
-    String var;
-    Var(String var){
-        this.var = var;
+    public And(Expr e1, Expr e2){
+        this.e1 = e1;
+        this.e2 = e2;
     }
+    /*
+    public boolean eval(Environment env){
+        return e1.eval(env) && e2.eval(env);
+    };
+    */
 
 }
 
-*/
-
-
-
-
-// 3*(y+1)
-/*
-Expr e= new Multiplication(new Constant(3),
-                           new Addition(new Variable("y"),
-			                new Constant(1))) */

@@ -1,10 +1,10 @@
 import java.util.HashMap;
 import java.util.Map.Entry;
-
+/*
 class Environment {
     private HashMap<String,Integer> variableValues = new HashMap<String,Integer>();
     public Environment() { }
-    public void setVariable(String name, Integer value) {
+    public void setVariable(String name, boolean value) {
         variableValues.put(name, value);
     }
 
@@ -22,3 +22,4 @@ class Environment {
         return table;
     }
 }
+*/
