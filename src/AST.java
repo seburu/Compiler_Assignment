@@ -91,13 +91,12 @@ class Assignment extends AST{
 */
 
 class Update extends Something{
-    List<Assignment> assignments = new ArrayList<>();
+    List<implParser.AssignmentContext> assignments = new ArrayList<>();
 
-    public Update(List<Token> assignments){
-        for (Token i : assignments){
-
+    public Update(List<implParser.AssignmentContext> assignments){
+        for (implParser.AssignmentContext i : assignments){
+            this.assignments.add(i);
         }
-
     }
 
 }

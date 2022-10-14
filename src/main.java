@@ -92,13 +92,8 @@ class Interpreter extends AbstractParseTreeVisitor<AST> implements implVisitor<A
     }
 
     public Update visitUpdate(implParser.UpdateContext ctx) {
-        List<Assignment> assignments = new ArrayList<>();
-        visit(ctx.as.get(0));
 
-
-
-
-        return null;
+        return new Update(ctx.as);
     }
 
     public Simulate visitSimulate(implParser.SimulateContext ctx) {
