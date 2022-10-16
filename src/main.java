@@ -92,8 +92,12 @@ class Interpreter extends AbstractParseTreeVisitor<AST> implements implVisitor<A
     }
 
     public Update visitUpdate(implParser.UpdateContext ctx) {
+        List<Assignment> assignments = new ArrayList<>();
+        for(implParser.AssignmentContext as: ctx.as){
+            assignments.add((Assignment) visit(as));
+        }
+        return new Update(assignments);
 
-        return new Update(ctx.as);
     }
 
     public Simulate visitSimulate(implParser.SimulateContext ctx) {
@@ -102,30 +106,30 @@ class Interpreter extends AbstractParseTreeVisitor<AST> implements implVisitor<A
 
     public AST visitAssignment(implParser.AssignmentContext ctx) {
 
-
-        visit(ctx.e);
-        return null;
+        //visit(ctx.e);
+        return new Assignment(ctx.id.getText(),(Expr) visit(ctx.e));
     }
 
     public AST visitParenthesis(implParser.ParenthesisContext ctx) {
-        return null;
+        return visit(ctx.e);
     }
 
     public AST visitNot(implParser.NotContext ctx) {
-        return null;
+        return new Not((Expr)visit(ctx.e));
+        //return null;
     }
 
     public AST visitOr(implParser.OrContext ctx) {
-        return null;
+        return new Or((Expr)visit(ctx.e1),(Expr)visit(ctx.e2));
     }
 
 
     public AST visitVar(implParser.VarContext ctx) {
-        return null;
+        return new Var(ctx.getText());
     }
 
     public AST visitAnd(implParser.AndContext ctx) {
-        return null;
+        return new And((Expr) visit(ctx.e1), (Expr)visit(ctx.e2));
     }
 
 
