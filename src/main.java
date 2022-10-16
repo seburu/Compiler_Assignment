@@ -11,7 +11,7 @@ public class main {
         // we expect exactly one argument: the name of the input file
         if (args.length!=1) {
             System.err.println("\n");
-            System.err.println("Impl Interpreter\n");
+            System.err.println("Impl Interpreterr\n");
             System.err.println("=================\n\n");
             System.err.println("Please give as input argument a filename\n");
             System.exit(-1);
