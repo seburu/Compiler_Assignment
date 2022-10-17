@@ -2,6 +2,7 @@ import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.tree.*;
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +38,8 @@ public class main {
         // Construct an interpreter and run it on the parse tree
         Interpreter interpreter = new Interpreter();
         Something result = (Something) interpreter.visit(parseTree);
-        System.out.println(result);
+        result.eval(new Environment());
+        System.out.println();
    }
 }
 
@@ -50,7 +52,7 @@ class Interpreter extends AbstractParseTreeVisitor<AST> implements implVisitor<A
 
     public AST visitStart(implParser.StartContext ctx){
 
-        Hardware hardware=visitHardware(ctx.ha);
+        Hardware hardware=(Hardware) visit(ctx.ha);
 
         Inputs inputs = visitInputs(ctx.in);
 
@@ -69,7 +71,9 @@ class Interpreter extends AbstractParseTreeVisitor<AST> implements implVisitor<A
 
 
         Something p = new Program(hardware, inputs, outputs, latches, updates, simulate);
-        p.eval(new Environment());
+        Environment env = new Environment();
+        p.eval(env);
+        System.out.println(env);
 
         return p;
 

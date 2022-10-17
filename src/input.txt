@@ -1,6 +1,6 @@
 .hardware trafiklys
 
-.inputs Button Yourmom Is Gay
+.inputs Button
 
 .outputs Red Yel Green PRed PGreen
 

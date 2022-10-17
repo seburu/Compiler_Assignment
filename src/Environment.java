@@ -13,6 +13,21 @@ class Environment {
         if (value == null) { System.err.println("Variable not defined: "+name); System.exit(-1); }
         return value;
     }
+    public Boolean containsKey(String input){
+        if(variableValues.containsKey(input)){
+            return true;
+        }
+        return false;
+    }
+
+    public Boolean toBoolean(int input){
+        if(input == 1){
+            return true;
+        }else if(input == 0){
+            return false;
+        }
+        return null; //TODO error handling
+    }
 
     public String toString() {
         String table = "";

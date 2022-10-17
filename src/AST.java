@@ -1,5 +1,6 @@
 import org.antlr.v4.runtime.Token;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class AST{}
@@ -34,6 +35,47 @@ class Program extends Something{
 
     public void eval(Environment env) {
         this.hardware.eval(env);
+        this.inputs.eval(env);
+        initializeOuputs(env);
+        initializeLatches(env);
+        initializeUpdate(env);
+
+        for(String sim : simulate.b){
+            outputs.eval(env);
+            env.setVariable(simulate.id, env.toBoolean(Integer.parseInt(sim)));
+            updates.eval(env);
+            for(Latch latch : latches){
+                latch.eval(env);
+            }
+
+        }
+        System.out.println(outputs.tracess);
+
+    }
+
+    private void initializeOuputs(Environment env) {
+        for(String i : outputs.ids){
+            env.setVariable(i, false);//TODO Maybe fix
+        }
+    }
+
+    private void initializeUpdate(Environment env) {
+        for (Assignment i : updates.assignments){
+                env.setVariable(i.id,false);
+                System.out.println("Jeg eksisterede ikke, opretter: " + env.getVariable(i.id));
+        }
+    }
+
+    private void initializeLatches(Environment env) {
+        for(Latch i : latches){
+            if(env.containsKey(i.id2)){
+                System.out.println("jeg findes allerede");
+                env.setVariable(i.id2, env.getVariable(i.id1));
+            }else{
+                System.out.println("jeg findes ikke endnu");
+                env.setVariable(i.id2,false);
+            }
+        }
     }
 }
 
@@ -45,7 +87,7 @@ class Hardware extends Something{
     }
 
     public void eval(Environment env) {
-        System.out.println("");
+
     }
 }
 
@@ -59,27 +101,32 @@ class Inputs extends Something{
     }
 
     public void eval(Environment env) {
-
+        env.setVariable(ids.get(0), false);//TODO Maybe fix
     }
 }
 
 class Outputs extends Something{
     List<String> ids = new ArrayList<>();
+    List<List<String>> tracess= new ArrayList<>();
 
     public Outputs(List<Token> ids){
         for(Token i : ids){
             this.ids.add(i.getText());
+            tracess.add(new ArrayList<String>());
         }
     }
 
     public void eval(Environment env) {
 
+        for (int i = 0; i < ids.size(); i++) {
+            tracess.get(i).add(env.getVariable(ids.get(i)).toString());
+        }
     }
 }
 
 class Latch extends Something{
     String id1,id2;
-
+    List<String> trace = new ArrayList<>();
     public Latch(Token id1, Token id2) {
         this.id1=id1.getText();
         this.id2=id2.getText();
@@ -87,7 +134,9 @@ class Latch extends Something{
     }
 
     public void eval(Environment env) {
-
+        env.setVariable(id2,env.getVariable(id1));
+        trace.add(id2);
+        System.out.println(id2);
     }
 }
 
@@ -99,20 +148,26 @@ class Update extends Something{
     }
 
     public void eval(Environment env) {
-
+        for (Assignment i : assignments){
+            env.setVariable(i.id,i.e.eval(env));
+        }
     }
 }
 
 class Simulate extends Something{
     String id;
-    String b;
+    String[] b;
 
     public Simulate(String id, String b){
         this.id = id;
-        this.b = b;
+        this.b = b.split("");
     }
 
     public void eval(Environment env) {
+        for(String i : b){
+
+        }
+
 
     }
 }
