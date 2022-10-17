@@ -5,7 +5,7 @@ import java.util.List;
 public abstract class AST{}
 
 abstract class Something extends AST{
-
+    abstract public void eval(Environment env);
 }
 
 class Program extends Something{
@@ -31,6 +31,10 @@ class Program extends Something{
         this.updates = updates;
         this.simulate = simulate;
     }
+
+    public void eval(Environment env) {
+        this.hardware.eval(env);
+    }
 }
 
 class Hardware extends Something{
@@ -38,6 +42,10 @@ class Hardware extends Something{
 
     public Hardware(String id){
         this.id = id;
+    }
+
+    public void eval(Environment env) {
+        System.out.println("");
     }
 }
 
@@ -50,6 +58,9 @@ class Inputs extends Something{
         }
     }
 
+    public void eval(Environment env) {
+
+    }
 }
 
 class Outputs extends Something{
@@ -60,8 +71,11 @@ class Outputs extends Something{
             this.ids.add(i.getText());
         }
     }
-}
 
+    public void eval(Environment env) {
+
+    }
+}
 
 class Latch extends Something{
     String id1,id2;
@@ -71,20 +85,11 @@ class Latch extends Something{
         this.id2=id2.getText();
 
     }
-}
-/*
-class Assignment extends AST{
-    String id;
-    Expr e;
 
-    public Assignment(String id, Expr e){
-        this.id = id;
-        this.e = e;
+    public void eval(Environment env) {
+
     }
-
-
 }
-*/
 
 class Update extends Something{
     List<Assignment> assignments;
@@ -93,6 +98,9 @@ class Update extends Something{
         this.assignments=assignments;
     }
 
+    public void eval(Environment env) {
+
+    }
 }
 
 class Simulate extends Something{
@@ -103,10 +111,10 @@ class Simulate extends Something{
         this.id = id;
         this.b = b;
     }
-}
 
-abstract class Expr extends AST{
-    //abstract public boolean eval(Environment env);
+    public void eval(Environment env) {
+
+    }
 }
 
 class Assignment extends Something{
@@ -117,6 +125,14 @@ class Assignment extends Something{
         this.id = id;
         this.e = e;
     }
+
+    public void eval(Environment env){
+        env.setVariable(id,e.eval(env));
+    }
+}
+
+abstract class Expr extends AST{
+    abstract public Boolean eval(Environment env);
 }
 
 class And extends Expr{
@@ -127,6 +143,10 @@ class And extends Expr{
         this.e1 = e1;
         this.e2 = e2;
     }
+
+    public Boolean eval(Environment env) {
+        return e1.eval(env) && e2.eval(env);
+    }
 }
 
 class Var extends Expr{
@@ -135,6 +155,11 @@ class Var extends Expr{
     Var(String ID){
         this.ID=ID;
     }
+
+    public Boolean eval(Environment env) {
+        //return false;
+        return 	env.getVariable(ID);
+    }
 }
 
 class Not extends Expr{
@@ -142,6 +167,10 @@ class Not extends Expr{
 
     Not(Expr expr){
         this.expr=expr;
+    }
+
+    public Boolean eval(Environment env) {
+        return !expr.eval(env);
     }
 }
 
@@ -152,5 +181,9 @@ class Or extends Expr{
     public Or(Expr e1, Expr e2){
         this.e1 = e1;
         this.e2 = e2;
+    }
+
+    public Boolean eval(Environment env) {
+        return (e1.eval(env) || e2.eval(env));
     }
 }

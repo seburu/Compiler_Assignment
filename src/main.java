@@ -69,6 +69,7 @@ class Interpreter extends AbstractParseTreeVisitor<AST> implements implVisitor<A
 
 
         Something p = new Program(hardware, inputs, outputs, latches, updates, simulate);
+        p.eval(new Environment());
 
         return p;
 
