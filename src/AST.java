@@ -1,12 +1,8 @@
 import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.xpath.XPathLexerErrorListener;
-
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AST{};
+public abstract class AST{}
 
 abstract class Something extends AST{
 
@@ -91,12 +87,10 @@ class Assignment extends AST{
 */
 
 class Update extends Something{
-    List<implParser.AssignmentContext> assignments = new ArrayList<>();
+    List<Assignment> assignments;
 
-    public Update(List<implParser.AssignmentContext> assignments){
-        for (implParser.AssignmentContext i : assignments){
-            this.assignments.add(i);
-        }
+    public Update(List<Assignment> assignments){
+        this.assignments=assignments;
     }
 
 }
@@ -133,11 +127,30 @@ class And extends Expr{
         this.e1 = e1;
         this.e2 = e2;
     }
-    /*
-    public boolean eval(Environment env){
-        return e1.eval(env) && e2.eval(env);
-    };
-    */
-
 }
 
+class Var extends Expr{
+    String ID;
+
+    Var(String ID){
+        this.ID=ID;
+    }
+}
+
+class Not extends Expr{
+    Expr expr;
+
+    Not(Expr expr){
+        this.expr=expr;
+    }
+}
+
+class Or extends Expr{
+    Expr e1;
+    Expr e2;
+
+    public Or(Expr e1, Expr e2){
+        this.e1 = e1;
+        this.e2 = e2;
+    }
+}
