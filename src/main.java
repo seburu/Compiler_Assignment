@@ -37,9 +37,8 @@ public class main {
 
         // Construct an interpreter and run it on the parse tree
         Interpreter interpreter = new Interpreter();
-        Something result = (Something) interpreter.visit(parseTree);
-        result.eval(new Environment());
-        System.out.println();
+        Program result = (Program) interpreter.visit(parseTree);
+        result.run(new Environment());
    }
 }
 
@@ -71,10 +70,6 @@ class Interpreter extends AbstractParseTreeVisitor<AST> implements implVisitor<A
 
 
         Something p = new Program(hardware, inputs, outputs, latches, updates, simulate);
-        Environment env = new Environment();
-        p.eval(env);
-        System.out.println(env);
-
         return p;
 
     }

@@ -41,41 +41,57 @@ class Program extends Something{
         initializeUpdate(env);
 
         for(String sim : simulate.b){
-            outputs.eval(env);
             env.setVariable(simulate.id, env.toBoolean(Integer.parseInt(sim)));
             updates.eval(env);
             for(Latch latch : latches){
                 latch.eval(env);
             }
-
+            outputs.eval(env);
         }
-        System.out.println(outputs.tracess);
 
     }
 
     private void initializeOuputs(Environment env) {
         for(String i : outputs.ids){
-            env.setVariable(i, false);//TODO Maybe fix
+            env.setVariable(i, false);
         }
     }
 
     private void initializeUpdate(Environment env) {
         for (Assignment i : updates.assignments){
                 env.setVariable(i.id,false);
-                System.out.println("Jeg eksisterede ikke, opretter: " + env.getVariable(i.id));
+                //System.out.println("Jeg eksisterede ikke, opretter: " + env.getVariable(i.id));
         }
     }
 
     private void initializeLatches(Environment env) {
         for(Latch i : latches){
             if(env.containsKey(i.id2)){
-                System.out.println("jeg findes allerede");
+                //System.out.println("jeg findes allerede");
                 env.setVariable(i.id2, env.getVariable(i.id1));
             }else{
-                System.out.println("jeg findes ikke endnu");
+                //System.out.println("jeg findes ikke endnu");
                 env.setVariable(i.id2,false);
             }
         }
+    }
+    public void prinProgram(){
+        for (String binaryInput: simulate.b) {
+            System.out.print(binaryInput);
+        }
+        System.out.println(" " + simulate.id);
+
+        for (int i = 0; i < outputs.tracess.size(); i++) {
+            for(String trace :outputs.tracess.get(i)){
+                System.out.print((trace.equals("true")) ? "1" : "0");
+            }
+            System.out.println(" " + outputs.ids.get(i));
+        }
+    }
+
+    public void run(Environment env){
+        eval(env);
+        prinProgram();
     }
 }
 
@@ -136,7 +152,6 @@ class Latch extends Something{
     public void eval(Environment env) {
         env.setVariable(id2,env.getVariable(id1));
         trace.add(id2);
-        System.out.println(id2);
     }
 }
 
