@@ -108,16 +108,14 @@ class Hardware extends Something{
 }
 
 class Inputs extends Something{
-    List<String> ids = new ArrayList<>();
+    String id;
 
-    public Inputs(List<Token> ids){
-        for(Token i : ids){
-            this.ids.add(i.getText());
-        }
+    public Inputs(String id){
+        this.id=id;
     }
 
     public void eval(Environment env) {
-        env.setVariable(ids.get(0), false);//TODO Maybe fix
+        env.setVariable(id, false);//TODO Maybe fix
     }
 }
 

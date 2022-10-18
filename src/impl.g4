@@ -4,7 +4,7 @@ start   : ha=hardware in=inputs ou=outputs la+=latch+ up=update si=simulate EOF;
 
 
 hardware: '.hardware' id=IDENTIFIER;
-inputs  : '.inputs' ids+=IDENTIFIER+;
+inputs  : '.inputs' id=IDENTIFIER;
 outputs : '.outputs' ids+=IDENTIFIER+;
 latch   : '.latch' id1=IDENTIFIER '->' id2=IDENTIFIER;
 update  : '.update' as+=assignment+;

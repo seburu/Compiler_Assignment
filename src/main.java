@@ -80,7 +80,7 @@ class Interpreter extends AbstractParseTreeVisitor<AST> implements implVisitor<A
 
     public Inputs visitInputs(implParser.InputsContext ctx) {
 
-        return new Inputs(ctx.ids);
+        return new Inputs(ctx.id.getText());
     }
 
     public Outputs visitOutputs(implParser.OutputsContext ctx) {
